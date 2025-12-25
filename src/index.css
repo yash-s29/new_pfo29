@@ -1,0 +1,203 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ======================================================
+   DESIGN TOKENS — light-blue, elegant, high contrast
+   ====================================================== */
+@layer base {
+  :root {
+    /* Canvas / background */
+    --canvas: 244 246 249;       /* soft light gray */
+    --canvas-soft: 230 237 244;  /* section background */
+    --canvas-subtle: 221 232 242; /* separators */
+
+    /* Glass surfaces */
+    --glass-bg: 255 255 255;
+    --glass-border: 255 255 255;
+
+    /* Text (high contrast) */
+    --text-primary: 31 41 55;    /* slate-800, main headings & paragraphs */
+    --text-secondary: 55 65 81;  /* slate-700, subheadings */
+    --text-muted: 107 114 128;   /* slate-500, captions/meta */
+
+    /* Accent colors */
+    --accent-cyan: 59 130 246;   /* blue-500 */
+    --accent-violet: 139 92 246; /* violet-500 */
+    --accent-pink: 236 72 153;   /* pink-500 */
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply font-sans antialiased;
+    background-color: rgb(var(--canvas));
+    color: rgb(var(--text-primary));
+    line-height: 1.6;
+  }
+}
+
+/* ======================================================
+   GLASS SYSTEM — light-friendly glassmorphism
+   ====================================================== */
+@layer components {
+  .glass {
+    background: rgb(var(--glass-bg) / 0.45);
+    backdrop-filter: blur(14px) saturate(120%);
+    -webkit-backdrop-filter: blur(14px) saturate(120%);
+    border: 1px solid rgb(var(--glass-border) / 0.25);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.08),
+                inset 0 1px 0 rgba(255,255,255,0.1);
+    border-radius: 24px;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+  }
+
+  .glass:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.12),
+                inset 0 1px 0 rgba(255,255,255,0.15);
+  }
+
+  .glass-strong {
+    background: rgb(var(--glass-bg) / 0.65);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    border: 1px solid rgb(var(--glass-border) / 0.3);
+    box-shadow: 0 24px 80px rgba(0,0,0,0.12),
+                inset 0 1px 0 rgba(255,255,255,0.12);
+    border-radius: 28px;
+  }
+}
+
+/* ======================================================
+   TEXT UTILITIES — semantic & readable
+   ====================================================== */
+@layer utilities {
+  .text-primary { color: rgb(var(--text-primary)); }
+  .text-secondary { color: rgb(var(--text-secondary)); }
+  .text-muted { color: rgb(var(--text-muted)); }
+
+  .text-accent-cyan { color: rgb(var(--accent-cyan)); }
+  .text-accent-violet { color: rgb(var(--accent-violet)); }
+  .text-accent-pink { color: rgb(var(--accent-pink)); }
+
+  .section-dark .text-primary,
+  .section-dark .text-secondary,
+  .section-dark .text-muted {
+    color: rgb(255 255 255);
+  }
+
+  .heading-lg { font-size: 2.25rem; font-weight: 700; line-height: 1.2; }
+  .heading-md { font-size: 1.875rem; font-weight: 600; line-height: 1.3; }
+  .heading-sm { font-size: 1.5rem; font-weight: 500; line-height: 1.35; }
+}
+
+/* ======================================================
+   MOTION — ambient & subtle
+   ====================================================== */
+@keyframes float-ambient {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -10px, 0); }
+}
+
+@keyframes fade-up {
+  0% { opacity: 0; transform: translateY(16px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-left {
+  0% { opacity: 0; transform: translateX(-20px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slide-right {
+  0% { opacity: 0; transform: translateX(20px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+@layer utilities {
+  .animate-float-ambient { animation: float-ambient 12s ease-in-out infinite; }
+  .animate-fade-up { animation: fade-up 0.5s ease-out both; }
+  .animate-slide-left { animation: slide-left 0.6s ease-out both; }
+  .animate-slide-right { animation: slide-right 0.6s ease-out both; }
+  .will-change-transform { will-change: transform; }
+}
+
+/* ======================================================
+   INTERACTION — buttons, cards, links
+   ====================================================== */
+@layer utilities {
+  .interactive {
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+  }
+
+  .interactive:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(59,130,246,0.2);
+  }
+
+  .interactive:active {
+    transform: translateY(0);
+    box-shadow: 0 6px 16px rgba(59,130,246,0.15);
+  }
+
+  .focus-ring:focus-visible {
+    outline: 2px solid rgb(var(--accent-cyan));
+    outline-offset: 3px;
+  }
+}
+
+/* ======================================================
+   SCROLLBAR — subtle & consistent
+   ====================================================== */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(var(--text-muted)/0.45) transparent;
+}
+
+*::-webkit-scrollbar { width: 8px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: rgba(var(--text-muted)/0.45);
+  border-radius: 999px;
+}
+*::-webkit-scrollbar-thumb:hover { background: rgba(var(--text-muted)/0.65); }
+
+/* ======================================================
+   IMAGES & GLOBAL REFINEMENTS
+   ====================================================== */
+img {
+  @apply block w-full h-full object-cover rounded-xl;
+  filter: brightness(0.95) contrast(1.05);
+}
+
+a {
+  @apply transition-colors duration-300 focus-ring;
+}
+
+button {
+  @apply outline-none focus-ring interactive rounded-lg px-5 py-3 font-medium;
+}
+
+/* ======================================================
+   SECTION GRADIENTS / HIGHLIGHTS
+   ====================================================== */
+.bg-accent-gradient {
+  background: linear-gradient(90deg, rgb(var(--accent-cyan)), rgb(var(--accent-violet)));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bg-soft-gradient {
+  background: linear-gradient(180deg, rgb(var(--canvas)) 0%, rgb(var(--canvas-soft)) 100%);
+}
+
+.card-hover {
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.12);
+}
