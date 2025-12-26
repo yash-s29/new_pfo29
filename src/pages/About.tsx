@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useState, type ReactNode } from 'react';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
 import {
   Code2,
   Database,
@@ -12,6 +12,8 @@ import {
   Globe,
 } from 'lucide-react';
 
+/* ================= TYPES ================= */
+
 interface Skill {
   name: string;
   proficiency: number;
@@ -19,9 +21,18 @@ interface Skill {
 
 interface SkillCategory {
   title: string;
-  icon: React.ReactNode;
+  icon: ReactNode;
   skills: Skill[];
 }
+
+interface DriveItem {
+  icon: ReactNode;
+  title: string;
+  desc: string;
+  color: 'cyan' | 'violet';
+}
+
+/* ================= DATA ================= */
 
 const skillCategories: SkillCategory[] = [
   {
@@ -75,75 +86,132 @@ const skillCategories: SkillCategory[] = [
   },
 ];
 
+const driveItems: DriveItem[] = [
+  {
+    icon: <Layout />,
+    title: 'UI Development',
+    desc: 'Motion-aware layouts and scalable component systems.',
+    color: 'cyan',
+  },
+  {
+    icon: <PieChart />,
+    title: 'Data Visualization',
+    desc: 'Turning complexity into clarity.',
+    color: 'violet',
+  },
+  {
+    icon: <BarChart3 />,
+    title: 'Data Analysis',
+    desc: 'Finding insight beyond surface metrics.',
+    color: 'cyan',
+  },
+  {
+    icon: <Globe />,
+    title: 'Web Systems',
+    desc: 'Designing resilient end-to-end architectures.',
+    color: 'violet',
+  },
+];
+
+/* ================= MOTION ================= */
+
+const slideVariants: Variants = {
+  enter: (dir: number) => ({
+    opacity: 0,
+    x: dir > 0 ? 90 : -90,
+    scale: 0.96,
+  }),
+  center: {
+    opacity: 1,
+    x: 0,
+    scale: 1,
+    transition: { type: 'spring', stiffness: 140, damping: 22 },
+  },
+  exit: (dir: number) => ({
+    opacity: 0,
+    x: dir < 0 ? 90 : -90,
+    scale: 0.96,
+  }),
+};
+
+/* ================= COMPONENT ================= */
+
 export default function About() {
   const [index, setIndex] = useState(0);
+  const [direction, setDirection] = useState(1);
   const [paused, setPaused] = useState(false);
 
-  /* ---------- Auto-slide ---------- */
   useEffect(() => {
     if (paused) return;
     const timer = setInterval(() => {
+      setDirection(1);
       setIndex((prev) => (prev + 1) % skillCategories.length);
-    }, 5000);
+    }, 4800);
     return () => clearInterval(timer);
   }, [paused]);
 
   return (
-    <section className="min-h-screen pt-20 bg-canvas">
-      <div className="max-w-6xl mx-auto px-6 space-y-24">
+    <section className="min-h-screen pt-20 bg-canvas overflow-hidden">
+      <div className="max-w-6xl mx-auto px-6 space-y-28">
 
-        {/* ================= HEADER ================= */}
+        {/* HEADER */}
         <motion.header
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7, ease: 'easeOut' }}
+          transition={{ duration: 0.8 }}
           className="text-center max-w-3xl mx-auto"
         >
           <h1 className="text-5xl font-bold text-primary mb-5">
-            About <span className="bg-gradient-to-r from-accent-cyan to-accent-violet bg-clip-text text-transparent">Me</span>
+            About{' '}
+            <span className="bg-gradient-to-r from-accent-cyan to-accent-violet bg-clip-text text-transparent">
+              Me
+            </span>
           </h1>
           <p className="text-lg text-secondary">
-            I focus on building systems that are visually clear, logically sound,
-            and reliable under real-world use.
+            I build systems that balance visual clarity, technical depth,
+            and real-world reliability.
           </p>
         </motion.header>
 
-        {/* ================= SKILLS SLIDER ================= */}
+        {/* SKILLS SLIDER */}
         <section
-          className="relative flex justify-center items-center overflow-hidden"
+          className="relative flex justify-center"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
-          <AnimatePresence mode="wait">
+          <AnimatePresence custom={direction} mode="wait">
             <motion.div
               key={index}
-              initial={{ opacity: 0, x: 80, scale: 0.96 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
-              exit={{ opacity: 0, x: -80, scale: 0.96 }}
-              transition={{ type: 'spring', stiffness: 120, damping: 20 }}
-              className="w-full max-w-md glass-strong rounded-3xl p-6"
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              className="w-full max-w-md glass-strong rounded-3xl p-7"
             >
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 rounded-lg bg-accent-cyan/15 text-accent-cyan">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="p-3 rounded-xl bg-gradient-to-br from-accent-cyan to-accent-violet text-white">
                   {skillCategories[index].icon}
                 </div>
-                <h3 className="text-xl font-semibold text-primary">{skillCategories[index].title}</h3>
+                <h3 className="text-xl font-semibold text-primary">
+                  {skillCategories[index].title}
+                </h3>
               </div>
 
               <div className="space-y-4">
-                {skillCategories[index].skills.map((skill, i) => (
-                  <div key={i}>
+                {skillCategories[index].skills.map((skill) => (
+                  <div key={skill.name}>
                     <div className="flex justify-between mb-1 text-sm">
                       <span className="text-secondary">{skill.name}</span>
                       <span className="text-muted">{skill.proficiency}%</span>
                     </div>
-                    <div className="h-2 rounded-full bg-accent-cyan/10 overflow-hidden">
+                    <div className="h-2 rounded-full bg-white/10 overflow-hidden">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${skill.proficiency}%` }}
-                        transition={{ duration: 0.8, ease: 'easeOut' }}
-                        className="h-full rounded-full bg-gradient-to-r from-accent-cyan to-accent-violet"
+                        transition={{ duration: 0.9 }}
+                        className="h-full bg-gradient-to-r from-accent-cyan to-accent-violet"
                       />
                     </div>
                   </div>
@@ -153,90 +221,37 @@ export default function About() {
           </AnimatePresence>
         </section>
 
-        {/* ================= WHAT DRIVES ME ================= */}
+        {/* WHAT DRIVES ME */}
         <section>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="text-3xl font-bold text-primary mb-10 text-center"
-          >
+          <h2 className="text-3xl font-bold text-center text-primary mb-12">
             What Drives Me
-          </motion.h2>
+          </h2>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { icon: <Layout />, title: 'UI Development', desc: 'Clean layouts, motion discipline, and component systems that scale.', color: 'cyan' },
-              { icon: <PieChart />, title: 'Data Visualization', desc: 'Making complex data intuitive, readable, and decision-ready.', color: 'violet' },
-              { icon: <BarChart3 />, title: 'Data Analysis', desc: 'Finding patterns, asking better questions, avoiding vanity metrics.', color: 'cyan' },
-              { icon: <Globe />, title: 'Web Systems', desc: 'Architecting reliable full-stack applications end to end.', color: 'violet' },
-            ].map((item, i) => (
-              <DriveCard
-                key={i}
-                icon={item.icon}
-                title={item.title}
-                desc={item.desc}
-                color={item.color as 'cyan' | 'violet'}
-              />
+            {driveItems.map((item, i) => (
+              <DriveCard key={i} {...item} />
             ))}
           </div>
         </section>
-
-        {/* ================= QUICK FACTS ================= */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="glass-strong rounded-3xl p-8"
-        >
-          <h2 className="text-3xl font-bold text-primary mb-6">Quick Facts</h2>
-
-          <div className="space-y-4">
-            {[
-              { label: 'Location', value: 'Open to remote & global opportunities' },
-              { label: 'Education', value: 'B.E. in Information Technology' },
-              { label: 'Languages', value: 'English, Hindi, Marathi, Japanese' },
-              { label: 'Interests', value: 'Technology, data, visualization, system design, exploration' },
-            ].map((fact, i) => (
-              <div key={i} className="flex gap-3 items-start">
-                <span className="mt-2 w-2 h-2 rounded-full bg-accent-violet" />
-                <p className="text-secondary">
-                  <span className="font-semibold text-primary">{fact.label}:</span> {fact.value}
-                </p>
-              </div>
-            ))}
-          </div>
-        </motion.section>
       </div>
     </section>
   );
 }
 
-/* ================= REUSABLE COMPONENTS ================= */
-function DriveCard({
-  icon,
-  title,
-  desc,
-  color,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  desc: string;
-  color: 'cyan' | 'violet';
-}) {
-  const shadowClass = color === 'cyan' ? 'hover:shadow-glowCyan' : 'hover:shadow-glowViolet';
-  const iconBg = color === 'cyan'
-    ? 'bg-gradient-to-br from-accent-cyan to-accent-cyan/60 group-hover:from-accent-cyan/70 group-hover:to-accent-cyan/40'
-    : 'bg-gradient-to-br from-accent-violet to-accent-violet/60 group-hover:from-accent-violet/70 group-hover:to-accent-violet/40';
+/* ================= DRIVE CARD ================= */
+
+function DriveCard({ icon, title, desc, color }: DriveItem) {
+  const gradient =
+    color === 'cyan'
+      ? 'from-accent-cyan to-sky-500'
+      : 'from-accent-violet to-purple-500';
 
   return (
     <motion.div
-      whileHover={{ scale: 1.04 }}
-      className={`group glass rounded-2xl p-6 transition-all ${shadowClass}`}
+      whileHover={{ y: -10, scale: 1.05 }}
+      className="glass rounded-2xl p-6 transition-all"
     >
-      <div className={`inline-flex p-3 mb-4 rounded-xl text-white ${iconBg} transition-all`}>
+      <div className={`inline-flex p-3 mb-4 rounded-xl bg-gradient-to-br ${gradient} text-white`}>
         {icon}
       </div>
       <h3 className="text-lg font-semibold text-primary mb-2">{title}</h3>
