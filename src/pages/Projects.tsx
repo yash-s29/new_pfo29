@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { ChevronLeft, ChevronRight, ExternalLink, Github, X } from 'lucide-react';
 
 const CARD_WIDTH = 340;
 
+/* ================= TYPES ================= */
 type ProjectType = {
   id: number;
   title: string;
@@ -40,6 +41,22 @@ type Certification = {
   };
 };
 
+/* ================= ANIMATION VARIANTS ================= */
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+};
+
+const hoverLift: Variants = {
+  hover: { y: -8, scale: 1.04, transition: { type: 'spring', stiffness: 260, damping: 18 } },
+};
+
+const buttonPop: Variants = {
+  hover: { y: -2, scale: 1.05, boxShadow: '0px 20px 40px rgba(59,130,246,0.35)' },
+  tap: { scale: 0.96 },
+};
+
+/* ================= MAIN COMPONENT ================= */
 export default function Projects() {
   const [projectIndex, setProjectIndex] = useState(0);
   const [certIndex, setCertIndex] = useState(0);
@@ -136,39 +153,32 @@ export default function Projects() {
   ];
 
   return (
-    <section id="projects" className="py-28 aurora-canvas overflow-hidden">
+    <motion.section
+      id="projects"
+      className="py-28 aurora-canvas overflow-hidden"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+      variants={fadeUp}
+    >
       <div className="max-w-7xl mx-auto px-6 lg:px-8 space-y-28">
-
         {/* Featured Projects */}
-        <div>
-          <header className="mb-12 text-center md:text-left">
-            <h2 className="text-5xl font-extrabold text-black mb-4">Featured Projects</h2>
-            <p className="text-lg text-gray-700 max-w-xl mx-auto md:mx-0">
-              Selected work focused on system clarity, engineering discipline, and measurable impact.
-            </p>
-          </header>
+        <Section title="Featured Projects" description="Selected work focused on system clarity, engineering discipline, and measurable impact.">
           <Carousel index={projectIndex} setIndex={setProjectIndex} max={projects.length}>
             {projects.map(project => (
               <ProjectCard key={project.id} project={project} onClick={() => setSelectedProject(project)} />
             ))}
           </Carousel>
-        </div>
+        </Section>
 
         {/* Certifications */}
-        <div>
-          <header className="mb-12 text-center md:text-left">
-            <h3 className="text-4xl font-extrabold text-black mb-4">Certifications</h3>
-            <p className="text-lg text-gray-700 max-w-xl mx-auto md:mx-0">
-              Credentials that validate depth, not buzzwords.
-            </p>
-          </header>
+        <Section title="Certifications" description="Credentials that validate depth, not buzzwords.">
           <Carousel index={certIndex} setIndex={setCertIndex} max={certifications.length}>
             {certifications.map(cert => (
               <CertificationCard key={cert.id} cert={cert} onClick={() => setSelectedCert(cert)} />
             ))}
           </Carousel>
-        </div>
-
+        </Section>
       </div>
 
       {/* Modals */}
@@ -176,7 +186,20 @@ export default function Projects() {
         {selectedProject && <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />}
         {selectedCert && <CertificationModal cert={selectedCert} onClose={() => setSelectedCert(null)} />}
       </AnimatePresence>
-    </section>
+    </motion.section>
+  );
+}
+
+/* ================= SECTION WRAPPER ================= */
+function Section({ title, description, children }: { title: string; description: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <header className="mb-12 text-center md:text-left">
+        <h2 className="text-5xl font-extrabold text-black mb-4">{title}</h2>
+        <p className="text-lg text-gray-700 max-w-xl mx-auto md:mx-0">{description}</p>
+      </header>
+      {children}
+    </div>
   );
 }
 
@@ -188,8 +211,8 @@ function Carousel({ children, index, setIndex, max }: { children: React.ReactNod
   return (
     <div className="relative">
       <motion.div
-        className="flex gap-4"
-        animate={{ x: -index * (CARD_WIDTH + 16) }}
+        className="flex gap-6"
+        animate={{ x: -index * (CARD_WIDTH + 24) }}
         transition={{ type: 'spring', stiffness: 120, damping: 22 }}
       >
         {children}
@@ -204,12 +227,13 @@ function Carousel({ children, index, setIndex, max }: { children: React.ReactNod
 
 function NavButton({ left, onClick }: { left?: boolean; onClick: () => void }) {
   return (
-    <button
+    <motion.button
       onClick={onClick}
-      className={`absolute ${left ? '-left-4' : '-right-4'} top-1/2 -translate-y-1/2 p-2 rounded-full glass border border-gray-300 hover:bg-accent-cyan/20 hover:text-white transition`}
+      whileHover={{ scale: 1.1 }}
+      className={`absolute ${left ? '-left-6' : '-right-6'} top-1/2 -translate-y-1/2 p-3 rounded-full glass border border-gray-300 hover:bg-accent-cyan/20 hover:text-white transition`}
     >
       {left ? <ChevronLeft className="text-black" /> : <ChevronRight className="text-black" />}
-    </button>
+    </motion.button>
   );
 }
 
@@ -217,23 +241,24 @@ function NavButton({ left, onClick }: { left?: boolean; onClick: () => void }) {
 function ProjectCard({ project, onClick }: { project: ProjectType; onClick: () => void }) {
   return (
     <motion.div
-      whileHover={{ scale: 1.05 }}
-      className="min-w-[340px] max-w-[340px] rounded-2xl overflow-hidden glass cursor-pointer flex flex-col transition-shadow duration-300 shadow-sm hover:shadow-xl"
+      whileHover="hover"
+      variants={hoverLift}
+      className="min-w-[340px] max-w-[340px] rounded-2xl overflow-hidden glass cursor-pointer flex flex-col shadow-sm hover:shadow-xl transition-shadow"
     >
-      {project.image_url && (
-        <div className="h-40 bg-gray-100 overflow-hidden">
-          <img src={project.image_url} alt={project.title} className="w-full h-full object-cover" />
-        </div>
-      )}
+      {project.image_url && <img src={project.image_url} alt={project.title} className="h-40 w-full object-cover" />}
       <div className="p-6 flex flex-col gap-4 flex-1">
         <h4 onClick={onClick} className="text-2xl font-bold text-accent-orange hover:text-accent-cyan hover:underline cursor-pointer">{project.title}</h4>
         <p className="text-black text-lg">{project.description}</p>
         <div className="flex gap-3 flex-wrap mt-2">
           {project.live_url && (
-            <a href={project.live_url} target="_blank" rel="noreferrer" className="text-sm px-3 py-1 rounded-full bg-accent-orange/20 hover:bg-accent-orange hover:text-white font-medium transition flex items-center gap-2">Live <ExternalLink size={14} /></a>
+            <a href={project.live_url} target="_blank" rel="noreferrer" className="text-sm px-3 py-1 rounded-full bg-accent-orange/20 hover:bg-accent-orange hover:text-white font-medium flex items-center gap-2 transition">
+              Live <ExternalLink size={14} />
+            </a>
           )}
           {project.github_url && (
-            <a href={project.github_url} target="_blank" rel="noreferrer" className="text-sm px-3 py-1 rounded-full bg-accent-cyan/20 hover:bg-accent-cyan hover:text-white font-medium transition flex items-center gap-2">Code <Github size={14} /></a>
+            <a href={project.github_url} target="_blank" rel="noreferrer" className="text-sm px-3 py-1 rounded-full bg-accent-cyan/20 hover:bg-accent-cyan hover:text-white font-medium flex items-center gap-2 transition">
+              Code <Github size={14} />
+            </a>
           )}
         </div>
         <div className="flex gap-2 flex-wrap mt-auto">
@@ -250,8 +275,9 @@ function CertificationCard({ cert, onClick }: { cert: Certification; onClick: ()
   return (
     <motion.div
       onClick={onClick}
-      whileHover={{ scale: 1.05 }}
-      className="min-w-[340px] max-w-[340px] rounded-2xl p-6 glass cursor-pointer flex flex-col transition-shadow duration-300 shadow-sm hover:shadow-xl"
+      whileHover="hover"
+      variants={hoverLift}
+      className="min-w-[340px] max-w-[340px] rounded-2xl p-6 glass cursor-pointer flex flex-col shadow-sm hover:shadow-xl transition-shadow"
     >
       <div className="flex items-center gap-4 mb-4">
         {cert.image_url && <img src={cert.image_url} alt={cert.title} className="w-14 h-14 object-cover rounded-lg" />}
@@ -272,17 +298,11 @@ function CertificationCard({ cert, onClick }: { cert: Certification; onClick: ()
 /* ================= MODALS ================= */
 function ProjectModal({ project, onClose }: { project: ProjectType; onClose: () => void }) {
   return (
-    <motion.div
-      className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-6"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
+    <motion.div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-6"
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
     >
-      <motion.div
-        className="bg-white rounded-3xl max-w-4xl w-full overflow-y-auto max-h-[90vh] p-8 relative space-y-6 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 scrollbar-thumb-rounded transition-all"
-        initial={{ scale: 0.95 }}
-        animate={{ scale: 1 }}
-        exit={{ scale: 0.95 }}
+      <motion.div className="bg-white rounded-3xl max-w-4xl w-full overflow-y-auto max-h-[90vh] p-8 relative space-y-6 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 scrollbar-thumb-rounded"
+        initial={{ scale: 0.95 }} animate={{ scale: 1 }} exit={{ scale: 0.95 }}
       >
         <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-full bg-gray-200 hover:bg-accent-cyan/20 hover:text-white transition"><X className="text-black" /></button>
         <h2 className="text-3xl font-bold text-black">{project.title}</h2>
@@ -300,17 +320,11 @@ function ProjectModal({ project, onClose }: { project: ProjectType; onClose: () 
 
 function CertificationModal({ cert, onClose }: { cert: Certification; onClose: () => void }) {
   return (
-    <motion.div
-      className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-6"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
+    <motion.div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-6"
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
     >
-      <motion.div
-        className="bg-white rounded-3xl max-w-4xl w-full overflow-y-auto max-h-[90vh] p-8 relative space-y-6 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 scrollbar-thumb-rounded transition-all"
-        initial={{ scale: 0.95 }}
-        animate={{ scale: 1 }}
-        exit={{ scale: 0.95 }}
+      <motion.div className="bg-white rounded-3xl max-w-4xl w-full overflow-y-auto max-h-[90vh] p-8 relative space-y-6 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 scrollbar-thumb-rounded"
+        initial={{ scale: 0.95 }} animate={{ scale: 1 }} exit={{ scale: 0.95 }}
       >
         <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-full bg-gray-200 hover:bg-accent-cyan/20 hover:text-white transition"><X className="text-black" /></button>
         {cert.image_url && <img src={cert.image_url} alt={cert.title} className="w-32 h-32 object-cover rounded-lg mx-auto" />}
