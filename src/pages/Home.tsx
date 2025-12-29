@@ -78,12 +78,12 @@ export default function Home() {
               </h1>
 
               <p className="text-lg sm:text-xl font-medium text-secondary">
-                Full Stack Developer · Data Analytics · Power BI
+                Data Analytics Enthusiast · Power BI · ML · Full-Stack (MERN) 
               </p>
 
               <p className="text-base sm:text-lg text-secondary leading-relaxed max-w-xl">
-                I design and engineer high-performance web systems and translate complex data into decisive business insights.
-              </p>
+                Aspiring Data Analyst | Power BI & ML I focus on uncovering insights through data visualization and Machine Learning. While my main passion is Data Analytics, I’m also proficient in the Full-Stack (MERN).
+            </p>
             </div>
 
             {/* CTA */}
