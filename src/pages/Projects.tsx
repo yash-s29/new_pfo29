@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { ChevronLeft, ChevronRight, ExternalLink, Github, X } from 'lucide-react';
 
@@ -51,9 +51,11 @@ const hoverLift: Variants = {
   hover: { y: -8, scale: 1.04, transition: { type: 'spring', stiffness: 260, damping: 18 } },
 };
 
-const buttonPop: Variants = {
-  hover: { y: -2, scale: 1.05, boxShadow: '0px 20px 40px rgba(59,130,246,0.35)' },
-  tap: { scale: 0.96 },
+const floatVariants: Variants = {
+  float: {
+    y: [0, -6, 0],
+    transition: { repeat: Infinity, repeatType: 'reverse', duration: 4, ease: 'easeInOut' },
+  },
 };
 
 /* ================= MAIN COMPONENT ================= */
@@ -191,7 +193,7 @@ export default function Projects() {
 }
 
 /* ================= SECTION WRAPPER ================= */
-function Section({ title, description, children }: { title: string; description: string; children: React.ReactNode }) {
+function Section({ title, description, children }: { title: string; description: string; children: ReactNode }) {
   return (
     <div>
       <header className="mb-12 text-center md:text-left">
@@ -204,12 +206,12 @@ function Section({ title, description, children }: { title: string; description:
 }
 
 /* ================= CAROUSEL ================= */
-function Carousel({ children, index, setIndex, max }: { children: React.ReactNode; index: number; setIndex: (n: number) => void; max: number }) {
+function Carousel({ children, index, setIndex, max }: { children: ReactNode; index: number; setIndex: (n: number) => void; max: number }) {
   const next = () => setIndex(index >= max - 1 ? 0 : index + 1);
   const prev = () => setIndex(index <= 0 ? max - 1 : index - 1);
 
   return (
-    <div className="relative">
+    <motion.div className="relative" variants={floatVariants} animate="float">
       <motion.div
         className="flex gap-6"
         animate={{ x: -index * (CARD_WIDTH + 24) }}
@@ -221,7 +223,7 @@ function Carousel({ children, index, setIndex, max }: { children: React.ReactNod
         <NavButton left onClick={prev} />
         <NavButton onClick={next} />
       </>}
-    </div>
+    </motion.div>
   );
 }
 
