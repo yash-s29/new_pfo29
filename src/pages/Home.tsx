@@ -22,7 +22,7 @@ const itemVariants: Variants = {
     y: 0,
     filter: 'blur(0px)',
     transition: {
-      duration: 0.9,
+      duration: 0.85,
       ease: [0.22, 1, 0.36, 1],
     },
   },
@@ -31,7 +31,12 @@ const itemVariants: Variants = {
 const floatVariant: Variants = {
   float: {
     y: [0, -6, 0],
-    transition: { repeat: Infinity, repeatType: 'reverse', duration: 4, ease: 'easeInOut' },
+    transition: {
+      repeat: Infinity,
+      repeatType: 'reverse',
+      duration: 4,
+      ease: 'easeInOut',
+    },
   },
 };
 
@@ -87,7 +92,7 @@ export default function Home() {
                 onClick={scrollToProjects}
                 variants={floatVariant}
                 animate="float"
-                whileHover={{ scale: 1.1 }}
+                whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.96 }}
                 className="group inline-flex items-center gap-3 px-8 py-4 rounded-2xl
                            bg-gradient-to-r from-accent-cyan to-accent-violet
@@ -98,9 +103,11 @@ export default function Home() {
               </motion.button>
 
               <motion.a
-                whileHover={{ scale: 1.08, y: -2 }}
+                whileHover={{ scale: 1.06, y: -2 }}
                 href="mailto:ypp1664003@gmail.com?subject=Resume%20Request"
-                className="px-8 py-4 rounded-2xl border border-white/20 glass text-secondary hover:text-accent-cyan hover:bg-accent-cyan/10 transition-all"
+                className="px-8 py-4 rounded-2xl border border-white/20 glass
+                           text-secondary hover:text-accent-cyan
+                           hover:bg-accent-cyan/10 transition-all"
               >
                 Request CV
               </motion.a>
@@ -123,7 +130,7 @@ export default function Home() {
             />
 
             <motion.div
-              whileHover={{ scale: 1.08, rotate: 1.2 }}
+              whileHover={{ scale: 1.08, rotate: 1 }}
               className="relative w-72 h-72 sm:w-80 sm:h-80 rounded-full
                          glass-strong overflow-hidden border border-white/20 shadow-xl"
             >
@@ -182,6 +189,8 @@ function Stat({
   );
 }
 
+/* ================= SOCIAL LINK (FINAL, CORRECT) ================= */
+
 function SocialLink({
   href,
   icon,
@@ -192,27 +201,56 @@ function SocialLink({
   color: 'cyan' | 'violet';
 }) {
   const hoverBg = color === 'cyan' ? 'bg-accent-cyan/20' : 'bg-accent-violet/20';
-  const hoverText = color === 'cyan' ? 'text-accent-cyan' : 'text-accent-violet';
+
+  const label =
+    href.includes('github')
+      ? 'GitHub'
+      : href.includes('linkedin')
+      ? 'LinkedIn'
+      : 'Email';
 
   return (
     <motion.a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
+      aria-label={label}
+      className="relative group p-4 rounded-xl glass shadow-md
+                 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-cyan"
       variants={floatVariant}
       animate="float"
-      whileHover={{ scale: 1.2, y: -4 }}
-      className={`relative p-4 rounded-xl glass text-primary hover:${hoverText} hover:${hoverBg} transition-all shadow-md`}
+      whileHover={{ scale: 1.16, y: -4 }}
+      whileFocus={{ scale: 1.16, y: -4 }}
     >
-      {/* Pulsing Glow */}
+      {/* Glow */}
       <motion.div
+        aria-hidden
         className={`absolute inset-0 rounded-xl ${hoverBg}`}
-        variants={{
-          glow: { scale: [1, 1.2, 1], opacity: [0.3, 0.7, 0.3], transition: { repeat: Infinity, repeatType: 'reverse', duration: 2 } },
-        }}
-        animate="glow"
+        animate={{ scale: [1, 1.12, 1], opacity: [0.25, 0.5, 0.25] }}
+        transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
       />
-      {icon}
+
+      {/* Icon */}
+      <span className="relative z-10">{icon}</span>
+
+      {/* Tooltip (instant, smooth, universal) */}
+      <span
+        className="
+          pointer-events-none absolute left-1/2 -translate-x-1/2
+          top-full mt-3 whitespace-nowrap
+          rounded-lg bg-black/85 px-3 py-1.5
+          text-xs font-medium text-white shadow-lg
+
+          opacity-0 translate-y-2 scale-95
+          group-hover:opacity-100 group-hover:translate-y-0 group-hover:scale-100
+          group-focus-within:opacity-100 group-focus-within:translate-y-0 group-focus-within:scale-100
+
+          transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]
+          delay-75
+        "
+      >
+        {label}
+      </span>
     </motion.a>
   );
 }
