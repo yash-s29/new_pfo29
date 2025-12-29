@@ -36,21 +36,21 @@ interface DriveItem {
 
 const skillCategories: SkillCategory[] = [
   {
-    title: 'Frontend Engineering',
+    title: 'Frontend',
     icon: <Code2 size={22} />,
     skills: [
-      { name: 'React', proficiency: 95 },
-      { name: 'TypeScript', proficiency: 90 },
-      { name: 'Tailwind CSS', proficiency: 92 },
-      { name: 'Next.js', proficiency: 85 },
+      { name: 'React', proficiency: 90 },
+      { name: 'TypeScript', proficiency: 70 },
+      { name: 'Tailwind CSS', proficiency: 80 },
+      { name: 'HTML & CSS', proficiency: 90 },
     ],
   },
   {
     title: 'Backend Systems',
     icon: <Server size={22} />,
     skills: [
-      { name: 'Node.js', proficiency: 88 },
-      { name: 'Express.js', proficiency: 85 },
+      { name: 'Node.js', proficiency: 85 },
+      { name: 'Express.js', proficiency: 80 },
       { name: 'Python', proficiency: 80 },
       { name: 'PHP', proficiency: 70 },
     ],
@@ -68,8 +68,8 @@ const skillCategories: SkillCategory[] = [
     title: 'Data & Analytics',
     icon: <TrendingUp size={22} />,
     skills: [
-      { name: 'Pandas', proficiency: 90 },
-      { name: 'SQL Analytics', proficiency: 88 },
+      { name: 'Pandas', proficiency: 80 },
+      { name: 'SQL Analytics', proficiency: 80 },
       { name: 'Data Visualization', proficiency: 85 },
       { name: 'Machine Learning', proficiency: 75 },
     ],
@@ -78,19 +78,21 @@ const skillCategories: SkillCategory[] = [
     title: 'Tools & Infrastructure',
     icon: <Wrench size={22} />,
     skills: [
-      { name: 'Git', proficiency: 92 },
-      { name: 'Docker', proficiency: 78 },
-      { name: 'AWS', proficiency: 75 },
-      { name: 'CI/CD', proficiency: 80 },
+      { name: 'Git', proficiency: 85 },
+      { name: 'PowerBi', proficiency: 80 },
+      { name: 'Google Cloud', proficiency: 75 },
+      { name: 'WordPress', proficiency: 70 },
+
+
     ],
   },
 ];
 
 const driveItems: DriveItem[] = [
   {
-    icon: <Layout />,
-    title: 'UI Development',
-    desc: 'Motion-aware layouts and scalable component systems.',
+    icon: <BarChart3 />,
+    title: 'Data Analysis',
+    desc: 'Finding insight beyond surface metrics.',
     color: 'cyan',
   },
   {
@@ -100,9 +102,9 @@ const driveItems: DriveItem[] = [
     color: 'violet',
   },
   {
-    icon: <BarChart3 />,
-    title: 'Data Analysis',
-    desc: 'Finding insight beyond surface metrics.',
+    icon: <Layout />,
+    title: 'UI/UX Design',
+    desc: 'Crafting intuitive user experiences.',
     color: 'cyan',
   },
   {
@@ -271,3 +273,4 @@ function DriveCard({ icon, title, desc, color }: DriveItem) {
     </motion.div>
   );
 }
+
