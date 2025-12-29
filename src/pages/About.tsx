@@ -134,6 +134,13 @@ const slideVariants: Variants = {
   }),
 };
 
+const floatVariants: Variants = {
+  float: {
+    y: [0, -6, 0],
+    transition: { repeat: Infinity, repeatType: 'reverse', duration: 4, ease: 'easeInOut' },
+  },
+};
+
 /* ================= COMPONENT ================= */
 
 export default function About() {
@@ -175,10 +182,12 @@ export default function About() {
         </motion.header>
 
         {/* SKILLS SLIDER */}
-        <section
+        <motion.section
           className="relative flex justify-center"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
+          variants={floatVariants}
+          animate="float"
         >
           <AnimatePresence custom={direction} mode="wait">
             <motion.div
@@ -188,7 +197,7 @@ export default function About() {
               initial="enter"
               animate="center"
               exit="exit"
-              className="w-full max-w-md glass-strong rounded-3xl p-7"
+              className="w-full max-w-md glass-strong rounded-3xl p-7 shadow-lg"
             >
               <div className="flex items-center gap-4 mb-6">
                 <div className="p-3 rounded-xl bg-gradient-to-br from-accent-cyan to-accent-violet text-white">
@@ -210,7 +219,7 @@ export default function About() {
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${skill.proficiency}%` }}
-                        transition={{ duration: 0.9 }}
+                        transition={{ duration: 0.9, ease: 'easeOut' }}
                         className="h-full bg-gradient-to-r from-accent-cyan to-accent-violet"
                       />
                     </div>
@@ -219,10 +228,10 @@ export default function About() {
               </div>
             </motion.div>
           </AnimatePresence>
-        </section>
+        </motion.section>
 
         {/* WHAT DRIVES ME */}
-        <section>
+        <motion.section variants={floatVariants} animate="float">
           <h2 className="text-3xl font-bold text-center text-primary mb-12">
             What Drives Me
           </h2>
@@ -232,7 +241,7 @@ export default function About() {
               <DriveCard key={i} {...item} />
             ))}
           </div>
-        </section>
+        </motion.section>
       </div>
     </section>
   );
@@ -248,8 +257,11 @@ function DriveCard({ icon, title, desc, color }: DriveItem) {
 
   return (
     <motion.div
-      whileHover={{ y: -10, scale: 1.05 }}
-      className="glass rounded-2xl p-6 transition-all"
+      whileHover={{ y: -8, scale: 1.05 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+      variants={{ float: { y: [0, -4, 0], transition: { repeat: Infinity, repeatType: 'reverse', duration: 5 } } }}
+      animate="float"
+      className="glass rounded-2xl p-6 shadow-lg transition-all"
     >
       <div className={`inline-flex p-3 mb-4 rounded-xl bg-gradient-to-br ${gradient} text-white`}>
         {icon}
