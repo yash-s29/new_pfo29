@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 export default function Footer() {
   const socials = [
     { Icon: Github, href: 'https://github.com/yash-s29', label: 'GitHub Profile', color: 'cyan' },
-    { Icon: Linkedin, href: 'https://www.linkedin.com/in/yash-patil-473a13352/', label: 'LinkedIn Profile', color: 'violet' },
+    { Icon: Linkedin, href: 'https://www.linkedin.com/in/yash-patil279', label: 'LinkedIn Profile', color: 'violet' },
     { Icon: Mail, href: 'mailto:ypp1664003@gmail.com', label: 'Send Email', color: 'cyan' },
   ];
 
