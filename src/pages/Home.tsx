@@ -116,7 +116,7 @@ export default function Home() {
             {/* SOCIALS */}
             <div className="flex gap-4 pt-4">
               <SocialLink href="https://github.com/yash-s29" icon={<Github size={20} />} color="cyan" />
-              <SocialLink href="https://www.linkedin.com/in/yash-patil-473a13352" icon={<Linkedin size={20} />} color="violet" />
+              <SocialLink href="https://www.linkedin.com/in/yash-patil279" icon={<Linkedin size={20} />} color="violet" />
               <SocialLink href="mailto:ypp1664003@gmail.com" icon={<Mail size={20} />} color="cyan" />
             </div>
           </motion.div>
