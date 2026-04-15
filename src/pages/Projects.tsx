@@ -82,7 +82,7 @@ export default function Projects() {
         design_choices: ['Clean UI', 'Card-based menu', 'Responsive layout'],
         tools_used: ['Html', 'CSS', 'Javascript', 'Python', 'Flask', 'MongoDB'],
         future_improvements: ['Mobile app', 'Notifications Alerts', 'Monitor Route Efficiency', 'Predictive Maintenance'],
-        final_screens: ['/images/E1.png', '/images/E2.png', '/images/E3.png', '/images/E4.png'],
+        final_screens: ['/images/E1.png', '/images/E2.png', '/images/E3.png', '/images/E4.png', '/images/E5.png', '/images/E6.png'],
       },
     },
     {
