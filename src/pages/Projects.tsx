@@ -108,7 +108,7 @@ export default function Projects() {
       id: 3,
       title: 'Cafeteria',
       description: 'Online food ordering and cafeteria management system.',
-      live_url: 'https://cafeteria-frontend-dusky.vercel.app/',
+      live_url: 'https://cafeteria-kiosk29.vercel.app/',
       github_url: 'https://github.com/yash-s29/cafeteria-frontend',
       tech_stack: ['React', 'Node.js', 'Express.js', 'MongoDB', 'Tailwind CSS'],
       case_study: {
