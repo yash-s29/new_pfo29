@@ -70,7 +70,7 @@ export default function Projects() {
       id: 1,
       title: 'EV-Bus-Intelligent-Fleet-Analytics',
       description: 'Comprehensive fleet management system for electric bus fleets.',
-      live_url: '#',
+      live_url: 'https://ev-bus-fleet-battery-ai.streamlit.app/',
       github_url: 'https://github.com/yash-s29/EV-Bus-Intelligent-Fleet-Analytics',
       tech_stack: ['Html', 'CSS', 'Javascript', 'Python', 'Flask', 'MongoDB', 'ML Models(Linear Regression, Random Forest regressor)'],
       case_study: {
